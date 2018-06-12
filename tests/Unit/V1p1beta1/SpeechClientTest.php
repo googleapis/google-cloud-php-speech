@@ -20,22 +20,22 @@
  * This file was automatically generated - do not edit!
  */
 
-namespace Google\Cloud\Speech\Tests\Unit\V1;
+namespace Google\Cloud\Speech\Tests\Unit\V1p1beta1;
 
-use Google\Cloud\Speech\V1\SpeechClient;
+use Google\Cloud\Speech\V1p1beta1\SpeechClient;
 use Google\ApiCore\ApiException;
 use Google\ApiCore\BidiStream;
 use Google\ApiCore\CredentialsWrapper;
 use Google\ApiCore\LongRunning\OperationsClient;
 use Google\ApiCore\Testing\GeneratedTest;
 use Google\ApiCore\Testing\MockTransport;
-use Google\Cloud\Speech\V1\LongRunningRecognizeResponse;
-use Google\Cloud\Speech\V1\RecognitionAudio;
-use Google\Cloud\Speech\V1\RecognitionConfig;
-use Google\Cloud\Speech\V1\RecognitionConfig_AudioEncoding;
-use Google\Cloud\Speech\V1\RecognizeResponse;
-use Google\Cloud\Speech\V1\StreamingRecognizeRequest;
-use Google\Cloud\Speech\V1\StreamingRecognizeResponse;
+use Google\Cloud\Speech\V1p1beta1\LongRunningRecognizeResponse;
+use Google\Cloud\Speech\V1p1beta1\RecognitionAudio;
+use Google\Cloud\Speech\V1p1beta1\RecognitionConfig;
+use Google\Cloud\Speech\V1p1beta1\RecognitionConfig_AudioEncoding;
+use Google\Cloud\Speech\V1p1beta1\RecognizeResponse;
+use Google\Cloud\Speech\V1p1beta1\StreamingRecognizeRequest;
+use Google\Cloud\Speech\V1p1beta1\StreamingRecognizeResponse;
 use Google\LongRunning\GetOperationRequest;
 use Google\LongRunning\Operation;
 use Google\Protobuf\Any;
@@ -102,7 +102,7 @@ class SpeechClientTest extends GeneratedTest
         $this->assertSame(1, count($actualRequests));
         $actualFuncCall = $actualRequests[0]->getFuncCall();
         $actualRequestObject = $actualRequests[0]->getRequestObject();
-        $this->assertSame('/google.cloud.speech.v1.Speech/Recognize', $actualFuncCall);
+        $this->assertSame('/google.cloud.speech.v1p1beta1.Speech/Recognize', $actualFuncCall);
 
         $actualValue = $actualRequestObject->getConfig();
 
@@ -217,7 +217,7 @@ class SpeechClientTest extends GeneratedTest
 
         $actualApiFuncCall = $apiRequests[0]->getFuncCall();
         $actualApiRequestObject = $apiRequests[0]->getRequestObject();
-        $this->assertSame('/google.cloud.speech.v1.Speech/LongRunningRecognize', $actualApiFuncCall);
+        $this->assertSame('/google.cloud.speech.v1p1beta1.Speech/LongRunningRecognize', $actualApiFuncCall);
         $actualValue = $actualApiRequestObject->getConfig();
 
         $this->assertProtobufEquals($config, $actualValue);
@@ -366,7 +366,7 @@ class SpeechClientTest extends GeneratedTest
         $this->assertSame(1, count($createStreamRequests));
         $streamFuncCall = $createStreamRequests[0]->getFuncCall();
         $streamRequestObject = $createStreamRequests[0]->getRequestObject();
-        $this->assertSame('/google.cloud.speech.v1.Speech/StreamingRecognize', $streamFuncCall);
+        $this->assertSame('/google.cloud.speech.v1p1beta1.Speech/StreamingRecognize', $streamFuncCall);
         $this->assertNull($streamRequestObject);
 
         $callObjects = $transport->popCallObjects();
