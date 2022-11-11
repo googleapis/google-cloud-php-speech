@@ -296,6 +296,7 @@ class SpeechGapicClient
      * @return \Google\ApiCore\OperationResponse
      *
      * @throws ApiException if the remote call fails
+     * @deprecated
      */
     public function longRunningRecognize($config, $audio, array $optionalArgs = [])
     {
@@ -307,6 +308,38 @@ class SpeechGapicClient
         }
 
         return $this->startOperationsCall('LongRunningRecognize', $optionalArgs, $request, $this->getOperationsClient())->wait();
+    }
+
+    /**
+     * Performs asynchronous speech recognition: receive results via the
+     * google.longrunning.Operations interface. Returns either an
+     * `Operation.error` or an `Operation.response` which contains
+     * a `LongRunningRecognizeResponse` message.
+     * For more information on asynchronous speech recognition, see the
+     * [how-to](https://cloud.google.com/speech-to-text/docs/async-recognize).
+     *
+     * @param LongRunningRecognizeRequest $request The request message.
+     * @param array  $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     * @return OperationResponse
+     * @throws ApiException if the remote call fails
+     */
+    public function sendLongRunningRecognize(
+        LongRunningRecognizeRequest $request,
+        array $optionalArgs = []
+    ) : OperationResponse {
+        return $this->startOperationsCall(
+            'LongRunningRecognize',
+            $optionalArgs,
+            $request,
+            $this->getOperationsClient()
+        )->wait();
     }
 
     /**
@@ -340,6 +373,7 @@ class SpeechGapicClient
      * @return \Google\Cloud\Speech\V1\RecognizeResponse
      *
      * @throws ApiException if the remote call fails
+     * @deprecated
      */
     public function recognize($config, $audio, array $optionalArgs = [])
     {
@@ -347,6 +381,34 @@ class SpeechGapicClient
         $request->setConfig($config);
         $request->setAudio($audio);
         return $this->startCall('Recognize', RecognizeResponse::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
+     * Performs synchronous speech recognition: receive results after all audio
+     * has been sent and processed.
+     *
+     * @param RecognizeRequest $request The request message.
+     * @param array  $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     * @return OperationResponse
+     * @throws ApiException if the remote call fails
+     */
+    public function sendRecognize(
+        RecognizeRequest $request,
+        array $optionalArgs = []
+    ) : RecognizeResponse {
+        return $this->startCall(
+            'Recognize',
+            RecognizeResponse::class,
+            $optionalArgs,
+            $request
+        )->wait();
     }
 
     /**
@@ -406,6 +468,12 @@ class SpeechGapicClient
      */
     public function streamingRecognize(array $optionalArgs = [])
     {
-        return $this->startCall('StreamingRecognize', StreamingRecognizeResponse::class, $optionalArgs, null, Call::BIDI_STREAMING_CALL);
+        return $this->startCall(
+            'StreamingRecognize',
+            StreamingRecognizeResponse::class,
+            $optionalArgs,
+            null,
+            Call::BIDI_STREAMING_CALL
+        );
     }
 }
