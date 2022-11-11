@@ -33,6 +33,7 @@ use Google\Cloud\Speech\V1\Gapic\SpeechGapicClient;
 
 /**
  * {@inheritdoc}
+ * @deprecated
  */
 class SpeechClient extends SpeechGapicClient
 {

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2017 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,11 @@
  * Updates to the above are reflected here through a refresh process.
  */
 
-namespace Google\Cloud\Speech\V1\Gapic;
+namespace Google\Cloud\Speech\V1\Client\BaseClient;
 
 use Google\ApiCore\ApiException;
-
 use Google\ApiCore\Call;
 use Google\ApiCore\CredentialsWrapper;
-
 use Google\ApiCore\GapicClientTrait;
 use Google\ApiCore\LongRunning\OperationsClient;
 use Google\ApiCore\OperationResponse;
@@ -53,44 +51,8 @@ use Google\LongRunning\Operation;
  * This class provides the ability to make remote calls to the backing service through method
  * calls that map to API methods. Sample code to get started:
  *
- * ```
- * $speechClient = new Google\Cloud\Speech\V1\SpeechClient();
- * try {
- *     $config = new Google\Cloud\Speech\V1\RecognitionConfig();
- *     $audio = new Google\Cloud\Speech\V1\RecognitionAudio();
- *     $operationResponse = $speechClient->longRunningRecognize($config, $audio);
- *     $operationResponse->pollUntilComplete();
- *     if ($operationResponse->operationSucceeded()) {
- *         $result = $operationResponse->getResult();
- *     // doSomethingWith($result)
- *     } else {
- *         $error = $operationResponse->getError();
- *         // handleError($error)
- *     }
- *     // Alternatively:
- *     // start the operation, keep the operation name, and resume later
- *     $operationResponse = $speechClient->longRunningRecognize($config, $audio);
- *     $operationName = $operationResponse->getName();
- *     // ... do other work
- *     $newOperationResponse = $speechClient->resumeOperation($operationName, 'longRunningRecognize');
- *     while (!$newOperationResponse->isDone()) {
- *         // ... do other work
- *         $newOperationResponse->reload();
- *     }
- *     if ($newOperationResponse->operationSucceeded()) {
- *         $result = $newOperationResponse->getResult();
- *     // doSomethingWith($result)
- *     } else {
- *         $error = $newOperationResponse->getError();
- *         // handleError($error)
- *     }
- * } finally {
- *     $speechClient->close();
- * }
- * ```
- * @deprecated
  */
-class SpeechGapicClient
+class SpeechBaseClient
 {
     use GapicClientTrait;
 
@@ -128,15 +90,15 @@ class SpeechGapicClient
         return [
             'serviceName' => self::SERVICE_NAME,
             'apiEndpoint' => self::SERVICE_ADDRESS . ':' . self::DEFAULT_SERVICE_PORT,
-            'clientConfig' => __DIR__ . '/../resources/speech_client_config.json',
-            'descriptorsConfigPath' => __DIR__ . '/../resources/speech_descriptor_config.php',
-            'gcpApiConfigPath' => __DIR__ . '/../resources/speech_grpc_config.json',
+            'clientConfig' => __DIR__ . '/../../resources/speech_client_config.json',
+            'descriptorsConfigPath' => __DIR__ . '/../../resources/speech_descriptor_config.php',
+            'gcpApiConfigPath' => __DIR__ . '/../../resources/speech_grpc_config.json',
             'credentialsConfig' => [
                 'defaultScopes' => self::$serviceScopes,
             ],
             'transportConfig' => [
                 'rest' => [
-                    'restClientConfigPath' => __DIR__ . '/../resources/speech_rest_client_config.php',
+                    'restClientConfigPath' => __DIR__ . '/../../resources/speech_rest_client_config.php',
                 ],
             ],
         ];
@@ -243,93 +205,36 @@ class SpeechGapicClient
      * For more information on asynchronous speech recognition, see the
      * [how-to](https://cloud.google.com/speech-to-text/docs/async-recognize).
      *
-     * Sample code:
-     * ```
-     * $speechClient = new Google\Cloud\Speech\V1\SpeechClient();
-     * try {
-     *     $config = new Google\Cloud\Speech\V1\RecognitionConfig();
-     *     $audio = new Google\Cloud\Speech\V1\RecognitionAudio();
-     *     $operationResponse = $speechClient->longRunningRecognize($config, $audio);
-     *     $operationResponse->pollUntilComplete();
-     *     if ($operationResponse->operationSucceeded()) {
-     *         $result = $operationResponse->getResult();
-     *     // doSomethingWith($result)
-     *     } else {
-     *         $error = $operationResponse->getError();
-     *         // handleError($error)
-     *     }
-     *     // Alternatively:
-     *     // start the operation, keep the operation name, and resume later
-     *     $operationResponse = $speechClient->longRunningRecognize($config, $audio);
-     *     $operationName = $operationResponse->getName();
-     *     // ... do other work
-     *     $newOperationResponse = $speechClient->resumeOperation($operationName, 'longRunningRecognize');
-     *     while (!$newOperationResponse->isDone()) {
-     *         // ... do other work
-     *         $newOperationResponse->reload();
-     *     }
-     *     if ($newOperationResponse->operationSucceeded()) {
-     *         $result = $newOperationResponse->getResult();
-     *     // doSomethingWith($result)
-     *     } else {
-     *         $error = $newOperationResponse->getError();
-     *         // handleError($error)
-     *     }
-     * } finally {
-     *     $speechClient->close();
-     * }
-     * ```
-     *
-     * @param RecognitionConfig $config       Required. Provides information to the recognizer that specifies how to
-     *                                        process the request.
-     * @param RecognitionAudio  $audio        Required. The audio data to be recognized.
-     * @param array             $optionalArgs {
+     * @param LongRunningRecognizeRequest $request The request message.
+     * @param array  $optionalArgs {
      *     Optional.
      *
-     *     @type TranscriptOutputConfig $outputConfig
-     *           Optional. Specifies an optional destination for the recognition results.
      *     @type RetrySettings|array $retrySettings
      *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
      *           associative array of retry settings parameters. See the documentation on
      *           {@see RetrySettings} for example usage.
      * }
-     *
-     * @return \Google\ApiCore\OperationResponse
-     *
+     * @return OperationResponse
      * @throws ApiException if the remote call fails
      */
-    public function longRunningRecognize($config, $audio, array $optionalArgs = [])
-    {
-        $request = new LongRunningRecognizeRequest();
-        $request->setConfig($config);
-        $request->setAudio($audio);
-        if (isset($optionalArgs['outputConfig'])) {
-            $request->setOutputConfig($optionalArgs['outputConfig']);
-        }
-
-        return $this->startOperationsCall('LongRunningRecognize', $optionalArgs, $request, $this->getOperationsClient())->wait();
+    public function longRunningRecognize(
+        LongRunningRecognizeRequest $request,
+        array $optionalArgs = []
+    ) : OperationResponse {
+        return $this->startOperationsCall(
+            'LongRunningRecognize',
+            $optionalArgs,
+            $request,
+            $this->getOperationsClient()
+        )->wait();
     }
 
     /**
      * Performs synchronous speech recognition: receive results after all audio
      * has been sent and processed.
      *
-     * Sample code:
-     * ```
-     * $speechClient = new Google\Cloud\Speech\V1\SpeechClient();
-     * try {
-     *     $config = new Google\Cloud\Speech\V1\RecognitionConfig();
-     *     $audio = new Google\Cloud\Speech\V1\RecognitionAudio();
-     *     $response = $speechClient->recognize($config, $audio);
-     * } finally {
-     *     $speechClient->close();
-     * }
-     * ```
-     *
-     * @param RecognitionConfig $config       Required. Provides information to the recognizer that specifies how to
-     *                                        process the request.
-     * @param RecognitionAudio  $audio        Required. The audio data to be recognized.
-     * @param array             $optionalArgs {
+     * @param RecognizeRequest $request The request message.
+     * @param array  $optionalArgs {
      *     Optional.
      *
      *     @type RetrySettings|array $retrySettings
@@ -337,62 +242,24 @@ class SpeechGapicClient
      *           associative array of retry settings parameters. See the documentation on
      *           {@see RetrySettings} for example usage.
      * }
-     *
-     * @return \Google\Cloud\Speech\V1\RecognizeResponse
-     *
+     * @return OperationResponse
      * @throws ApiException if the remote call fails
      */
-    public function recognize($config, $audio, array $optionalArgs = [])
-    {
-        $request = new RecognizeRequest();
-        $request->setConfig($config);
-        $request->setAudio($audio);
-        return $this->startCall('Recognize', RecognizeResponse::class, $optionalArgs, $request)->wait();
+    public function recognize(
+        RecognizeRequest $request,
+        array $optionalArgs = []
+    ) : RecognizeResponse {
+        return $this->startCall(
+            'Recognize',
+            RecognizeResponse::class,
+            $optionalArgs,
+            $request
+        )->wait();
     }
 
     /**
      * Performs bidirectional streaming speech recognition: receive results while
      * sending audio. This method is only available via the gRPC API (not REST).
-     *
-     * Sample code:
-     * ```
-     * $speechClient = new Google\Cloud\Speech\V1\SpeechClient();
-     * try {
-     *     $request = new Google\Cloud\Speech\V1\StreamingRecognizeRequest();
-     *     // Write all requests to the server, then read all responses until the
-     *     // stream is complete
-     *     $requests = [
-     *         $request,
-     *     ];
-     *     $stream = $speechClient->streamingRecognize();
-     *     $stream->writeAll($requests);
-     *     foreach ($stream->closeWriteAndReadAll() as $element) {
-     *         // doSomethingWith($element);
-     *     }
-     *     // Alternatively:
-     *     // Write requests individually, making read() calls if
-     *     // required. Call closeWrite() once writes are complete, and read the
-     *     // remaining responses from the server.
-     *     $requests = [
-     *         $request,
-     *     ];
-     *     $stream = $speechClient->streamingRecognize();
-     *     foreach ($requests as $request) {
-     *         $stream->write($request);
-     *         // if required, read a single response from the stream
-     *         $element = $stream->read();
-     *         // doSomethingWith($element)
-     *     }
-     *     $stream->closeWrite();
-     *     $element = $stream->read();
-     *     while (!is_null($element)) {
-     *         // doSomethingWith($element)
-     *         $element = $stream->read();
-     *     }
-     * } finally {
-     *     $speechClient->close();
-     * }
-     * ```
      *
      * @param array $optionalArgs {
      *     Optional.
