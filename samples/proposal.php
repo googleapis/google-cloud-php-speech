@@ -40,7 +40,7 @@ $request = (new LongRunningRecognizeRequest())
 
 // Deliver the request.
 try {
-    $operation = $client->longRunningRecognize($request);;
+    $operation = $client->longRunningRecognize($request);
     // Handle the operation as needed.
 } catch (ApiException $ex) {
     printf('Call failed with message: %s', $ex->getMessage());
